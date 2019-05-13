@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Card, { Bottom, Top } from './Card';
 import { CardRow, CardPile } from './CardCollection';
+import { Table, Discards, Lost, Hand, Play } from './Table';
 import produce from 'immer';
 import './normalize.css';
 
@@ -62,55 +63,62 @@ const App: React.FC = () => {
   const readyToSelect = played.length === 0;
 
   return (
-    <>
-      <h2>Play</h2>
-      <CardRow>
-        {played.map((c, idx) => (
-          <div key={c.name} style={{width: 100, marginRight: 5}}>
-            <Card onClick={() => setCards(discardCard(c, cards))}>
-              <Top>{c.name}</Top>
-              <Bottom />
-            </Card>
-          </div>
-        ))}
-      </CardRow>
+    <Table>
+      <Play>
+        <CardRow>
+          {played.map((c, idx) => (
+            <div key={c.name} style={{width: 100, marginRight: 5}}>
+              <Card onClick={() => setCards(discardCard(c, cards))}>
+                <Top>{c.name}</Top>
+                <Bottom />
+              </Card>
+            </div>
+          ))}
+        </CardRow>
+      </Play>
 
-      <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
-      <CardRow>
-        {hand.map((c, idx) => (
-          <div key={c.name} style={{width: 100, border: (selected.includes(c) ? '1px solid red' : undefined)}}>
-            <Card onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
-              <Top>{c.name}</Top>
-              <Bottom />
-            </Card>
-          </div>
-        ))}
-      </CardRow>
+      <Hand>
+        <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
+        <CardRow>
+          {hand.map((c, idx) => (
+            <div key={c.name} style={{width: 100, border: (selected.includes(c) ? '1px solid red' : undefined)}}>
+              <Card onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
+                <Top>{c.name}</Top>
+                <Bottom />
+              </Card>
+            </div>
+          ))}
+        </CardRow>
+      </Hand>
 
-      <h2>Discard</h2>
-      <CardPile>
-        {discard.map((c, idx) => (
-          <div key={c.name} style={{width: 100}}>
-            <Card>
-              <Top>{c.name}</Top>
-              <Bottom />
-            </Card>
-          </div>
-        ))}
-      </CardPile>
+      <Discards>
+        <h2>Discard</h2>
+        <CardPile>
+          {discard.map((c, idx) => (
+            <div key={c.name} style={{width: 100}}>
+              <Card>
+                <Top>{c.name}</Top>
+                <Bottom />
+              </Card>
+            </div>
+          ))}
+        </CardPile>
+      </Discards>
 
-      <h2>Lost</h2>
-      <CardPile>
-        {lost.map((c, idx) => (
-          <div key={c.name} style={{width: 100}}>
-            <Card>
-              <Top>{c.name}</Top>
-              <Bottom />
-            </Card>
-          </div>
-        ))}
-      </CardPile>
-    </>
+      <Lost>
+        <h2>Lost</h2>
+        <CardPile>
+          {lost.map((c, idx) => (
+            <div key={c.name} style={{width: 100}}>
+              <Card>
+                <Top>{c.name}</Top>
+                <Bottom />
+              </Card>
+            </div>
+          ))}
+        </CardPile>
+      </Lost>
+    </Table>
   );
 }
 
