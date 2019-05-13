@@ -14,7 +14,7 @@ const Frame = styled.div`
   border: 5px solid grey;
   border-radius: 4%;
   height: 100%;
-  cursor: pointer;
+  cursor: ${(props) => props.onClick ? 'pointer' : 'auto'};
 `;
 
 export const Top = styled.div`
