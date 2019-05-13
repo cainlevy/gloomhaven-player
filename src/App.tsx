@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Card, { Bottom, Top } from './Card';
+import Card, { Bottom, Top, SmallCard } from './Card';
 import { CardRow, CardPile } from './CardCollection';
 import { Table, Discards, Lost, Hand, Play } from './Table';
 import produce from 'immer';
@@ -67,12 +67,10 @@ const App: React.FC = () => {
       <Play>
         <CardRow>
           {played.map((c, idx) => (
-            <div key={c.name} style={{width: 100, marginRight: 5}}>
-              <Card onClick={() => setCards(discardCard(c, cards))}>
-                <Top>{c.name}</Top>
-                <Bottom />
-              </Card>
-            </div>
+            <SmallCard key={c.name} onClick={() => setCards(discardCard(c, cards))}>
+              <Top>{c.name}</Top>
+              <Bottom />
+            </SmallCard>
           ))}
         </CardRow>
       </Play>
@@ -81,11 +79,11 @@ const App: React.FC = () => {
         <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
         <CardRow>
           {hand.map((c, idx) => (
-            <div key={c.name} style={{width: 100, border: (selected.includes(c) ? '1px solid red' : undefined)}}>
-              <Card onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
+            <div key={c.name} style={{border: (selected.includes(c) ? '1px solid red' : undefined)}}>
+              <SmallCard key={c.name} onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
                 <Top>{c.name}</Top>
                 <Bottom />
-              </Card>
+              </SmallCard>
             </div>
           ))}
         </CardRow>
@@ -95,12 +93,10 @@ const App: React.FC = () => {
         <h2>Discard</h2>
         <CardPile>
           {discard.map((c, idx) => (
-            <div key={c.name} style={{width: 100}}>
-              <Card>
-                <Top>{c.name}</Top>
-                <Bottom />
-              </Card>
-            </div>
+            <SmallCard key={c.name}>
+              <Top>{c.name}</Top>
+              <Bottom />
+            </SmallCard>
           ))}
         </CardPile>
       </Discards>
@@ -109,12 +105,10 @@ const App: React.FC = () => {
         <h2>Lost</h2>
         <CardPile>
           {lost.map((c, idx) => (
-            <div key={c.name} style={{width: 100}}>
-              <Card>
-                <Top>{c.name}</Top>
-                <Bottom />
-              </Card>
-            </div>
+            <SmallCard key={c.name}>
+              <Top>{c.name}</Top>
+              <Bottom />
+            </SmallCard>
           ))}
         </CardPile>
       </Lost>
