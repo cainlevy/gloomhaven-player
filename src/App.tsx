@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Card, { Bottom, Top } from './Card';
 import CardCollection from './CardCollection';
 import produce from 'immer';
+import './normalize.css';
 
 type LocationType = 'hand' | 'discard' | 'lost' | 'played';
 
