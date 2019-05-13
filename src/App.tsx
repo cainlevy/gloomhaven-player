@@ -13,6 +13,7 @@ interface ActionCard {
 const BruteCards: ActionCard[] = [
   {name: 'Foo', location: 'hand'},
   {name: 'Bar', location: 'hand'},
+  {name: 'Baz', location: 'hand'},
 ];
 
 const withLocation = (location: LocationType | LocationType[]) =>
@@ -34,8 +35,6 @@ const unselectCard = moveCard('hand');
 const discardCard = moveCard('discard');
 const loseCard = moveCard('lost');
 
-// TODO: select two cards maximum (disable onclick on hand when two are selected)
-// TODO: require two cards to play selection
 // TODO: some cards are lost when played but it depends what action was taken
 // TODO: select top/bottom/attack/move when selecting card
 const App: React.FC = () => {
@@ -53,13 +52,15 @@ const App: React.FC = () => {
       .filter(withLocation('selected'))
       .reduce((memo, card) => discardCard(card.name, memo), cards);
 
+  const readyToPlay = cards.filter(withLocation('selected')).length === 2;
+
   return (
     <>
-      <h2>Hand <button onClick={() => setCards(playSelection())}>PLAY</button></h2>
+      <h2>Hand <button disabled={!readyToPlay} onClick={() => setCards(playSelection())}>PLAY</button></h2>
       <CardCollection>
         {hand.map((c, idx) => (
           <div key={c.name} style={{width: 100, marginRight: 5, border: (c.location === 'selected' ? '1px solid red' : undefined)}}>
-            <Card onClick={() => setCards(toggleSelection(c))}>
+            <Card onClick={(!readyToPlay || c.location === 'selected') ? () => setCards(toggleSelection(c)) : undefined}>
               <Top>{c.name}</Top>
               <Bottom />
             </Card>
