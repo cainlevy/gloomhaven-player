@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Card, { Bottom, Top } from './Card';
-import CardCollection from './CardCollection';
+import { CardRow, CardPile } from './CardCollection';
 import produce from 'immer';
 import './normalize.css';
 
@@ -64,7 +64,7 @@ const App: React.FC = () => {
   return (
     <>
       <h2>Play</h2>
-      <CardCollection>
+      <CardRow>
         {played.map((c, idx) => (
           <div key={c.name} style={{width: 100, marginRight: 5}}>
             <Card onClick={() => setCards(discardCard(c, cards))}>
@@ -73,43 +73,43 @@ const App: React.FC = () => {
             </Card>
           </div>
         ))}
-      </CardCollection>
+      </CardRow>
 
       <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
-      <CardCollection>
+      <CardRow>
         {hand.map((c, idx) => (
-          <div key={c.name} style={{width: 100, marginRight: 5, border: (selected.includes(c) ? '1px solid red' : undefined)}}>
+          <div key={c.name} style={{width: 100, border: (selected.includes(c) ? '1px solid red' : undefined)}}>
             <Card onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
               <Top>{c.name}</Top>
               <Bottom />
             </Card>
           </div>
         ))}
-      </CardCollection>
+      </CardRow>
 
       <h2>Discard</h2>
-      <CardCollection>
+      <CardPile>
         {discard.map((c, idx) => (
-          <div key={c.name} style={{width: 100, marginRight: 5}}>
+          <div key={c.name} style={{width: 100}}>
             <Card>
               <Top>{c.name}</Top>
               <Bottom />
             </Card>
           </div>
         ))}
-      </CardCollection>
+      </CardPile>
 
       <h2>Lost</h2>
-      <CardCollection>
+      <CardPile>
         {lost.map((c, idx) => (
-          <div key={c.name} style={{width: 100, marginRight: 5}}>
+          <div key={c.name} style={{width: 100}}>
             <Card>
               <Top>{c.name}</Top>
               <Bottom />
             </Card>
           </div>
         ))}
-      </CardCollection>
+      </CardPile>
     </>
   );
 }
