@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Card, { Bottom, Top, SmallCard } from './Card';
+import { Bottom, Top, SmallCard } from './Card';
 import { CardRow, CardPile } from './CardCollection';
 import { Table, Discards, Lost, Hand, Play } from './Table';
 import produce from 'immer';
@@ -62,14 +62,17 @@ const App: React.FC = () => {
   const readyToPlay = selected.length === 2;
   const readyToSelect = played.length === 0;
 
+  const playAttack = (card: ActionCard) => setCards(discardCard(card, cards));
+  const playMove = (card: ActionCard) => setCards(loseCard(card, cards));
+
   return (
     <Table>
       <Play>
         <CardRow>
           {played.map((c, idx) => (
-            <SmallCard key={c.name} onClick={() => setCards(discardCard(c, cards))}>
-              <Top>{c.name}</Top>
-              <Bottom />
+            <SmallCard key={c.name}>
+              <Top onClick={() => playAttack(c)}>{c.name}</Top>
+              <Bottom onClick={() => playMove(c)} />
             </SmallCard>
           ))}
         </CardRow>

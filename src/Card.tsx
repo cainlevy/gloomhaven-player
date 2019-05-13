@@ -14,17 +14,19 @@ const Frame = styled.div`
   border: 5px solid grey;
   border-radius: 4%;
   height: 100%;
-  cursor: ${(props) => props.onClick ? 'pointer' : 'auto'};
+  cursor: ${(props) => props.onClick ? 'pointer' : 'inherit'};
 `;
 
 export const Top = styled.div`
   flex: 1 1 50%;
   background-color: #aaa;
+  cursor: ${(props) => props.onClick ? 'pointer' : 'inherit'};
 `;
 
 export const Bottom = styled.div`
   flex: 1 1 50%;
   background-color: #999;
+  cursor: ${(props) => props.onClick ? 'pointer' : 'inherit'};
 `;
 
 const Card: React.FC<Props> = ({className, children, onClick}) => (
