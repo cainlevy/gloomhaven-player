@@ -3,7 +3,7 @@ import Card, { Bottom, Top } from './Card';
 import CardCollection from './CardCollection';
 import produce from 'immer';
 
-type LocationType = 'hand' | 'discard' | 'lost' | 'selected';
+type LocationType = 'hand' | 'discard' | 'lost' | 'played';
 
 interface ActionCard {
   name: string;
@@ -14,6 +14,7 @@ const BruteCards: ActionCard[] = [
   {name: 'Foo', location: 'hand'},
   {name: 'Bar', location: 'hand'},
   {name: 'Baz', location: 'hand'},
+  {name: 'Qux', location: 'hand'},
 ];
 
 const withLocation = (location: LocationType | LocationType[]) =>
@@ -22,45 +23,62 @@ const withLocation = (location: LocationType | LocationType[]) =>
     (card: ActionCard) => location.includes(card.location);
 
 const moveCard = (location: LocationType) =>
-  (name: string, cards: ActionCard[]) => {
-    const idx = cards.findIndex((c) => c.name === name);
-    return produce(cards, (draftState) => {
-      draftState[idx].location = location;
+  (card: ActionCard, deck: ActionCard[]) => {
+    return produce(deck, (draftState) => {
+      draftState[deck.indexOf(card)].location = location;
       return draftState;
     });
   }
 
-const selectCard = moveCard('selected');
-const unselectCard = moveCard('hand');
+const playCard = moveCard('played');
 const discardCard = moveCard('discard');
 const loseCard = moveCard('lost');
 
 // TODO: some cards are lost when played but it depends what action was taken
-// TODO: select top/bottom/attack/move when selecting card
+// TODO: select top/bottom/attack/move when playing card
 const App: React.FC = () => {
   const [cards, setCards] = useState(BruteCards);
+  const [selected, setSelected] = useState([] as ActionCard[]);
 
-  const hand = cards.filter(withLocation(['hand', 'selected']));
+  const played = cards.filter(withLocation('played'));
+  const hand = cards.filter(withLocation('hand'));
   const discard = cards.filter(withLocation('discard'));
   const lost = cards.filter(withLocation('lost'));
 
   const toggleSelection = (card: ActionCard) =>
-    card.location === 'hand' ? selectCard(card.name, cards) : unselectCard(card.name, cards);
+    setSelected(
+      selected.includes(card) ?
+        selected.filter((c) => c !== card) :
+        [...selected, card]
+    );
 
-  const playSelection = () =>
-    cards
-      .filter(withLocation('selected'))
-      .reduce((memo, card) => discardCard(card.name, memo), cards);
+  const playSelection = () => {
+    setCards(selected.reduce((memo, card) => playCard(card, memo), cards));
+    setSelected([]);
+  };
 
-  const readyToPlay = cards.filter(withLocation('selected')).length === 2;
+  const readyToPlay = selected.length === 2;
+  const readyToSelect = played.length === 0;
 
   return (
     <>
-      <h2>Hand <button disabled={!readyToPlay} onClick={() => setCards(playSelection())}>PLAY</button></h2>
+      <h2>Play</h2>
+      <CardCollection>
+        {played.map((c, idx) => (
+          <div key={c.name} style={{width: 100, marginRight: 5}}>
+            <Card onClick={() => setCards(discardCard(c, cards))}>
+              <Top>{c.name}</Top>
+              <Bottom />
+            </Card>
+          </div>
+        ))}
+      </CardCollection>
+
+      <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
       <CardCollection>
         {hand.map((c, idx) => (
-          <div key={c.name} style={{width: 100, marginRight: 5, border: (c.location === 'selected' ? '1px solid red' : undefined)}}>
-            <Card onClick={(!readyToPlay || c.location === 'selected') ? () => setCards(toggleSelection(c)) : undefined}>
+          <div key={c.name} style={{width: 100, marginRight: 5, border: (selected.includes(c) ? '1px solid red' : undefined)}}>
+            <Card onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
               <Top>{c.name}</Top>
               <Bottom />
             </Card>
