@@ -34,30 +34,47 @@ const moveCard = (location: TableLocation) =>
 const playCard = moveCard('played');
 const discardCard = moveCard('discard');
 const loseCard = moveCard('lost');
+const refreshCard = moveCard('hand');
+
+const randN = (n: number) => Math.floor((Math.random() * 10) % n)
 
 const App: React.FC = () => {
   const [cards, setCards] = useState(deck);
-  const [selected, setSelected] = useState([] as TableCard[]);
+  const [selectedForPlay, setSelectedForPlay] = useState([] as TableCard[]);
+  const [selectedForLongRest, setSelectedForLongRest] = useState([] as TableCard[]);
 
   const played = cards.filter(inLocation('played'));
   const hand = cards.filter(inLocation('hand'));
   const discard = cards.filter(inLocation('discard'));
   const lost = cards.filter(inLocation('lost'));
 
-  const toggleSelection = (card: TableCard) =>
-    setSelected(
-      selected.includes(card) ?
-        selected.filter((c) => c !== card) :
-        [...selected, card]
+  const ableToPlay = hand.length >= 2 && played.length === 0 && selectedForLongRest.length === 0;
+  const readyToPlay = selectedForPlay.length === 2;
+
+  const ableToRest = discard.length >= 2 && played.length === 0 && selectedForPlay.length === 0;
+  const readyToLongRest = selectedForLongRest.length === 1;
+
+  /*
+   * Planning Actions
+   */
+
+  const togglePlaySelection = (card: TableCard) =>
+    setSelectedForPlay(
+      selectedForPlay.includes(card) ?
+        selectedForPlay.filter((c) => c !== card) :
+        [...selectedForPlay, card]
     );
 
-  const playSelection = () => {
-    setCards(selected.reduce((memo, card) => playCard(card, memo), cards));
-    setSelected([]);
-  };
+  const toggleLongRestSelection = (card: TableCard) =>
+    setSelectedForLongRest(
+      selectedForLongRest.includes(card) ?
+        selectedForLongRest.filter((c) => c !== card) :
+        [...selectedForLongRest, card]
+    );
 
-  const readyToPlay = selected.length === 2;
-  const readyToSelect = played.length === 0;
+  /*
+   * Game Actions
+   */
 
   const playAction = (action: 'top' | 'bottom') =>
     (card: TableCard) => setCards(card[action].lose ? loseCard(card, cards) : discardCard(card, cards));
@@ -66,6 +83,21 @@ const App: React.FC = () => {
   // TODO: clickable areas for general attack/move actions
   // const playAttack = (card: TableCard) => setCards(discardCard(card, cards));
   // const playMove = (card: TableCard) => setCards(discardCard(card, cards));
+
+  const playSelection = () => {
+    setCards(selectedForPlay.reduce((memo, card) => playCard(card, memo), cards));
+    setSelectedForPlay([]);
+  };
+
+  const playLongRest = () => {
+    setCards(discard.reduce((memo, card) => selectedForLongRest.includes(card) ? loseCard(card, memo) : refreshCard(card, memo), cards));
+    setSelectedForLongRest([]);
+  };
+
+  const playShortRest = () => {
+    const randomDiscard = discard[randN(discard.length)];
+    setCards(discard.reduce((memo, card) => card === randomDiscard ? loseCard(card, memo) : refreshCard(card, memo), cards));
+  };
 
   return (
     <Table>
@@ -81,13 +113,13 @@ const App: React.FC = () => {
       </Play>
 
       <Hand>
-        <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
+        <h2>Hand <button disabled={!ableToPlay || !readyToPlay} onClick={playSelection}>PLAY</button></h2>
         <CardRow>
           {hand.map((c) => (
             <SmallCard
               key={c.name}
-              selected={selected.includes(c)}
-              onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}
+              selected={selectedForPlay.includes(c)}
+              onClick={(ableToPlay && (!readyToPlay || selectedForPlay.includes(c))) ? () => togglePlaySelection(c) : undefined}
             >
               <Top>{c.name}</Top>
               <Bottom />
@@ -97,10 +129,14 @@ const App: React.FC = () => {
       </Hand>
 
       <Discards>
-        <h2>Discard</h2>
+        <h2>Discard <button disabled={!ableToRest} onClick={readyToLongRest ? playLongRest : playShortRest}>{readyToLongRest ? 'Long' : 'Short'} Rest</button></h2>
         <CardPile>
           {discard.map((c, idx) => (
-            <SmallCard key={c.name}>
+            <SmallCard
+              key={c.name}
+              selected={selectedForLongRest.includes(c)}
+              onClick={(ableToRest && (!readyToLongRest || selectedForLongRest.includes(c))) ? () => toggleLongRestSelection(c) : undefined}
+            >
               <Top>{c.name}</Top>
               <Bottom />
             </SmallCard>

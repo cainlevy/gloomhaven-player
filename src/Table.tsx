@@ -7,6 +7,7 @@ export const Table = styled.div`
   grid-template-areas:
     '.    play play .       '
     'lost hand hand discards';
+  gap: 5px 5px;
 `;
 
 export const Discards = styled.div`
