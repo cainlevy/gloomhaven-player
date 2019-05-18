@@ -10,8 +10,10 @@ export default CardCollection;
 export const CardRow = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   > * {
     margin-right: 5px;
+    margin-bottom: 5px;
   }
 `;
 

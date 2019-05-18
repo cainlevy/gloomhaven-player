@@ -37,6 +37,6 @@ const Card: React.FC<Props> = ({className, children, onClick}) => (
   </AspectRatio>
 )
 
-export const SmallCard: React.FC<Props> = (props) => <div style={{width: 100}}><Card {...props} /></div>
+export const SmallCard: React.FC<Props> = (props) => <div style={{width: 150}}><Card {...props} /></div>
 
 export default Card;
