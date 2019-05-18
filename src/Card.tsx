@@ -5,13 +5,16 @@ import AspectRatio from './util/AspectRatio';
 interface Props {
   onClick?: () => void;
   className?: string;
+  selected?: boolean;
 }
 
-const Frame = styled.div`
+const SelectableDiv: React.FC<React.HTMLAttributes<HTMLDivElement> & {selected: boolean}> = ({selected, ...props}) => <div {...props}/>
+
+const Frame = styled(SelectableDiv)`
   display: flex;
   flex-direction: column;
   background-color: grey;
-  border: 5px solid grey;
+  border: 5px solid ${(props) => props.selected ? 'blue' : 'grey'};
   border-radius: 4%;
   height: 100%;
   cursor: ${(props) => props.onClick ? 'pointer' : 'inherit'};
@@ -29,9 +32,9 @@ export const Bottom = styled.div`
   cursor: ${(props) => props.onClick ? 'pointer' : 'inherit'};
 `;
 
-const Card: React.FC<Props> = ({className, children, onClick}) => (
+const Card: React.FC<Props> = ({className, children, onClick, selected}) => (
   <AspectRatio ratio={1.39} className={className}>
-    <Frame onClick={onClick}>
+    <Frame onClick={onClick} selected={!!selected}>
       {children}
     </Frame>
   </AspectRatio>

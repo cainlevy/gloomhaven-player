@@ -84,12 +84,14 @@ const App: React.FC = () => {
         <h2>Hand <button disabled={!readyToPlay} onClick={playSelection}>PLAY</button></h2>
         <CardRow>
           {hand.map((c) => (
-            <div key={c.name} style={{border: (selected.includes(c) ? '1px solid red' : undefined)}}>
-              <SmallCard key={c.name} onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}>
-                <Top>{c.name}</Top>
-                <Bottom />
-              </SmallCard>
-            </div>
+            <SmallCard
+              key={c.name}
+              selected={selected.includes(c)}
+              onClick={(readyToSelect && (!readyToPlay || selected.includes(c))) ? () => toggleSelection(c) : undefined}
+            >
+              <Top>{c.name}</Top>
+              <Bottom />
+            </SmallCard>
           ))}
         </CardRow>
       </Hand>
