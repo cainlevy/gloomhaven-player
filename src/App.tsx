@@ -36,8 +36,6 @@ const discardCard = moveCard('discard');
 const loseCard = moveCard('lost');
 const refreshCard = moveCard('hand');
 
-const randN = (n: number) => Math.floor((Math.random() * 10) % n)
-
 const App: React.FC = () => {
   const [cards, setCards] = useState(deck);
   const [selectedForPlay, setSelectedForPlay] = useState([] as TableCard[]);
@@ -95,7 +93,7 @@ const App: React.FC = () => {
   };
 
   const playShortRest = () => {
-    const randomDiscard = discard[randN(discard.length)];
+    const randomDiscard = discard[Math.floor(Math.random() * discard.length)];
     setCards(discard.reduce((memo, card) => card === randomDiscard ? loseCard(card, memo) : refreshCard(card, memo), cards));
   };
 
