@@ -19,3 +19,11 @@ export type TableLocation = 'hand' | 'discard' | 'lost' | 'played';
 export interface TableCard extends ActionCard {
   location: TableLocation;
 }
+
+const inLocation = (location: TableLocation) =>
+  (card: TableCard) => card.location === location
+
+export const inHand = inLocation('hand');
+export const inDiscard = inLocation('discard');
+export const inLost = inLocation('lost');
+export const inPlayed = inLocation('played');
