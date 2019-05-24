@@ -6,12 +6,12 @@ export const Table = styled.div`
   grid-template-rows: auto;
   grid-template-areas:
     '.    play play .       '
-    'lost hand hand discards';
+    'lost hand hand discard';
   gap: 5px 5px;
 `;
 
-export const Discards = styled.div`
-  grid-area: discards;
+export const Discard = styled.div`
+  grid-area: discard;
 `;
 
 export const Lost = styled.div`

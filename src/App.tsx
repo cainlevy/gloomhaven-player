@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Bottom, Top, SmallCard } from './Card';
 import { CardRow, CardPile } from './CardCollection';
-import { Table, Discards, Lost, Hand, Play } from './Table';
+import { Table, Discard, Lost, Hand, Play } from './Table';
 import './normalize.css';
 import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
 import Brute from './data/Brute';
@@ -20,7 +20,6 @@ const thisGame = newGame([
   Brute['Sweeping Blow'],
 ].map((c) => ({...c, location: 'hand'})));
 
-// TODO: generic attack, generic move
 const App: React.FC = () => {
   const [game, updateGame] = useState<Game>(thisGame);
 
@@ -56,7 +55,7 @@ const App: React.FC = () => {
         </CardRow>
       </Hand>
 
-      <Discards>
+      <Discard>
         <h2>Discard <button disabled={!ableToRest(game)} onClick={() => updateGame(readyToLongRest(game) ? playLongRest(game) : playShortRest(game))}>{readyToLongRest(game) ? 'Long' : 'Short'} Rest</button></h2>
         <CardPile>
           {game.deck.filter(inDiscard).map((c, idx) => (
@@ -73,7 +72,7 @@ const App: React.FC = () => {
             </SmallCard>
           ))}
         </CardPile>
-      </Discards>
+      </Discard>
 
       <Lost>
         <h2>Lost</h2>
