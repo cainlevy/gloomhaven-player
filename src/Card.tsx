@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 import AspectRatio from './util/AspectRatio';
 import { ActionCard } from './data/ActionCard';
+import CardIcon from './CardIcon';
 
 interface Props {
   className?: string;
@@ -41,6 +42,7 @@ const Frame = styled(SelectableDiv)`
 const Top = styled.div`
   grid-area: top;
   background-color: #aab;
+  position: relative;
   ${(props) => props.onClick && css`
     cursor: pointer;
     &:hover {
@@ -52,6 +54,7 @@ const Top = styled.div`
 const Bottom = styled.div`
   grid-area: bottom;
   background-color: #99a;
+  position: relative;
   ${(props) => props.onClick && css`
     cursor: pointer;
     &:hover {
@@ -90,6 +93,12 @@ const Name = styled.div`
   color: white;
 `;
 
+const BottomLeft = styled.div`
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+`;
+
 const Card: React.FC<Props> = ({card, ...props}) => {
   const onAttack = (e: React.MouseEvent<HTMLElement>) => {
     if (props.onAttack) {
@@ -108,9 +117,13 @@ const Card: React.FC<Props> = ({card, ...props}) => {
   return <AspectRatio ratio={1.39} className={props.className}>
     <Frame onClick={props.onSelect} selected={!!props.selected}>
       <Name>{card.name}</Name>
-      <Top onClick={props.onTopClick} />
+      <Top onClick={props.onTopClick}>
+        {card.top.lose && <BottomLeft><CardIcon>x</CardIcon></BottomLeft>}
+      </Top>
       <Attack onClick={props.onAttack && onAttack} />
-      <Bottom onClick={props.onBottomClick} />
+      <Bottom onClick={props.onBottomClick}>
+        {card.bottom.lose && <BottomLeft><CardIcon>x</CardIcon></BottomLeft>}
+      </Bottom>
       <Move onClick={props.onMove && onMove} />
     </Frame>
   </AspectRatio>;
