@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SmallCard } from './Card';
 import { CardRow, CardPile } from './CardCollection';
 import { Table, Discard, Lost, Hand, Play } from './Table';
@@ -6,6 +6,7 @@ import './normalize.css';
 import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
 import Brute from './data/Brute';
 import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, playTop, playBottom, togglePlaySelection, toggleLongRestSelection, playAttack, playMove } from './data/Game';
+import useStorage from './util/useStorage';
 
 const grannoxGame = newGame([
   Brute['Spare Dagger'],
@@ -21,7 +22,7 @@ const grannoxGame = newGame([
 ].map((c) => ({...c, location: 'hand'})));
 
 const App: React.FC = () => {
-  const [game, updateGame] = useState<Game>(grannoxGame);
+  const [game, updateGame] = useStorage<Game>('ghgame', grannoxGame);
 
   return (
     <Table>
