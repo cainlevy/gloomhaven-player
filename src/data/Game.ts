@@ -1,4 +1,4 @@
-import {TableCard, inDiscard, inHand, inPlayed} from './ActionCard';
+import {TableCard, inDiscard, inHand, inPlayed, TableLocation} from './ActionCard';
 import produce from 'immer';
 
 export interface Game {
@@ -47,6 +47,14 @@ const playAction = (action: 'top' | 'bottom') =>
 
 export const playTop = playAction('top');
 export const playBottom = playAction('bottom');
+
+const playToLocation = (location: TableLocation) =>
+  (game: Game, card: TableCard) => produce(game, (draft) => {
+    draft.deck[game.deck.indexOf(card)].location = location;
+  });
+
+export const playAttack = playToLocation('discard');
+export const playMove = playToLocation('discard');
 
 export const playSelection = (game: Game) =>
   produce(game, (draft) => {

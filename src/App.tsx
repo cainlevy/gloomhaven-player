@@ -5,7 +5,7 @@ import { Table, Discard, Lost, Hand, Play } from './Table';
 import './normalize.css';
 import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
 import Brute from './data/Brute';
-import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, playTop, playBottom, togglePlaySelection, toggleLongRestSelection } from './data/Game';
+import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, playTop, playBottom, togglePlaySelection, toggleLongRestSelection, playAttack, playMove } from './data/Game';
 
 const thisGame = newGame([
   Brute['Spare Dagger'],
@@ -33,6 +33,8 @@ const App: React.FC = () => {
               card={c}
               onTopClick={() => updateGame(playTop(game, c))}
               onBottomClick={() => updateGame(playBottom(game, c))}
+              onAttack={() => updateGame(playAttack(game, c))}
+              onMove={() => updateGame(playMove(game, c))}
             />
           ))}
         </CardRow>
