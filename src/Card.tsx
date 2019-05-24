@@ -1,11 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import AspectRatio from './util/AspectRatio';
+import { ActionCard } from './data/ActionCard';
 
 interface Props {
   onClick?: () => void;
   className?: string;
   selected?: boolean;
+  card: ActionCard;
 }
 
 const SelectableDiv: React.FC<React.HTMLAttributes<HTMLDivElement> & {selected: boolean}> = ({selected, ...props}) => <div {...props}/>
@@ -32,9 +34,17 @@ export const Bottom = styled.div`
   cursor: ${(props) => props.onClick ? 'pointer' : 'inherit'};
 `;
 
-const Card: React.FC<Props> = ({className, children, onClick, selected}) => (
+const Name = styled.div`
+  flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+`;
+
+const Card: React.FC<Props> = ({className, children, onClick, selected, card}) => (
   <AspectRatio ratio={1.39} className={className}>
     <Frame onClick={onClick} selected={!!selected}>
+      <Name>{card.name}</Name>
       {children}
     </Frame>
   </AspectRatio>

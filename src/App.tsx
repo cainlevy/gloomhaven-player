@@ -28,8 +28,8 @@ const App: React.FC = () => {
       <Play>
         <CardRow>
           {game.deck.filter(inPlayed).map((c) => (
-            <SmallCard key={c.name}>
-              <Top onClick={() => updateGame(playTop(game, c))}>{c.name}</Top>
+            <SmallCard key={c.name} card={c}>
+              <Top onClick={() => updateGame(playTop(game, c))} />
               <Bottom onClick={() => updateGame(playBottom(game, c))} />
             </SmallCard>
           ))}
@@ -42,13 +42,14 @@ const App: React.FC = () => {
           {game.deck.filter(inHand).map((c) => (
             <SmallCard
               key={c.name}
+              card={c}
               selected={game.selectedForPlay.includes(c)}
               onClick={(ableToPlay(game) && (!readyToPlay(game) || game.selectedForPlay.includes(c)))
                 ? () => updateGame(togglePlaySelection(game, c))
                 : undefined
               }
             >
-              <Top>{c.name}</Top>
+              <Top />
               <Bottom />
             </SmallCard>
           ))}
@@ -61,13 +62,14 @@ const App: React.FC = () => {
           {game.deck.filter(inDiscard).map((c, idx) => (
             <SmallCard
               key={c.name}
+              card={c}
               selected={game.selectedForLongRest.includes(c)}
               onClick={(ableToRest(game) && (!readyToLongRest(game) || game.selectedForLongRest.includes(c)))
                 ? () => updateGame(toggleLongRestSelection(game, c))
                 : undefined
               }
             >
-              <Top>{c.name}</Top>
+              <Top />
               <Bottom />
             </SmallCard>
           ))}
@@ -78,8 +80,8 @@ const App: React.FC = () => {
         <h2>Lost</h2>
         <CardPile>
           {game.deck.filter(inLost).map((c, idx) => (
-            <SmallCard key={c.name}>
-              <Top>{c.name}</Top>
+            <SmallCard key={c.name} card={c}>
+              <Top />
               <Bottom />
             </SmallCard>
           ))}
