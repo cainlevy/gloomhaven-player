@@ -1,8 +1,4 @@
 interface Action {
-  effects: string[];
-  duration?: string;
-  target?: string;
-  experience?: number | string;
   lose?: boolean;
 }
 
