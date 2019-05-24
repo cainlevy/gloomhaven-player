@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bottom, Top, SmallCard } from './Card';
+import { SmallCard } from './Card';
 import { CardRow, CardPile } from './CardCollection';
 import { Table, Discard, Lost, Hand, Play } from './Table';
 import './normalize.css';
@@ -28,10 +28,12 @@ const App: React.FC = () => {
       <Play>
         <CardRow>
           {game.deck.filter(inPlayed).map((c) => (
-            <SmallCard key={c.name} card={c}>
-              <Top onClick={() => updateGame(playTop(game, c))} />
-              <Bottom onClick={() => updateGame(playBottom(game, c))} />
-            </SmallCard>
+            <SmallCard
+              key={c.name}
+              card={c}
+              onTopClick={() => updateGame(playTop(game, c))}
+              onBottomClick={() => updateGame(playBottom(game, c))}
+            />
           ))}
         </CardRow>
       </Play>
@@ -44,14 +46,11 @@ const App: React.FC = () => {
               key={c.name}
               card={c}
               selected={game.selectedForPlay.includes(c)}
-              onClick={(ableToPlay(game) && (!readyToPlay(game) || game.selectedForPlay.includes(c)))
+              onSelect={(ableToPlay(game) && (!readyToPlay(game) || game.selectedForPlay.includes(c)))
                 ? () => updateGame(togglePlaySelection(game, c))
                 : undefined
               }
-            >
-              <Top />
-              <Bottom />
-            </SmallCard>
+            />
           ))}
         </CardRow>
       </Hand>
@@ -64,14 +63,11 @@ const App: React.FC = () => {
               key={c.name}
               card={c}
               selected={game.selectedForLongRest.includes(c)}
-              onClick={(ableToRest(game) && (!readyToLongRest(game) || game.selectedForLongRest.includes(c)))
+              onSelect={(ableToRest(game) && (!readyToLongRest(game) || game.selectedForLongRest.includes(c)))
                 ? () => updateGame(toggleLongRestSelection(game, c))
                 : undefined
               }
-            >
-              <Top />
-              <Bottom />
-            </SmallCard>
+            />
           ))}
         </CardPile>
       </Discard>
@@ -80,10 +76,10 @@ const App: React.FC = () => {
         <h2>Lost</h2>
         <CardPile>
           {game.deck.filter(inLost).map((c, idx) => (
-            <SmallCard key={c.name} card={c}>
-              <Top />
-              <Bottom />
-            </SmallCard>
+            <SmallCard
+              key={c.name}
+              card={c}
+            />
           ))}
         </CardPile>
       </Lost>
