@@ -7,7 +7,7 @@ import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
 import Brute from './data/Brute';
 import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, playTop, playBottom, togglePlaySelection, toggleLongRestSelection, playAttack, playMove } from './data/Game';
 
-const thisGame = newGame([
+const grannoxGame = newGame([
   Brute['Spare Dagger'],
   Brute['Balanced Measure'],
   Brute['Juggernaut'],
@@ -21,7 +21,7 @@ const thisGame = newGame([
 ].map((c) => ({...c, location: 'hand'})));
 
 const App: React.FC = () => {
-  const [game, updateGame] = useState<Game>(thisGame);
+  const [game, updateGame] = useState<Game>(grannoxGame);
 
   return (
     <Table>
@@ -41,7 +41,7 @@ const App: React.FC = () => {
       </Play>
 
       <Hand>
-        <h2>Hand <button disabled={!ableToPlay(game) || !readyToPlay(game)} onClick={() => updateGame(playSelection(game))}>PLAY</button></h2>
+        <h2>Hand <button disabled={!ableToPlay(game) || !readyToPlay(game)} onClick={() => updateGame(playSelection(game))}>CHOOSE</button></h2>
         <CardRow>
           {game.deck.filter(inHand).map((c) => (
             <SmallCard
@@ -75,7 +75,7 @@ const App: React.FC = () => {
       </Discard>
 
       <Lost>
-        <h2>Lost</h2>
+        <h2>Lost <button onClick={() => updateGame(grannoxGame)}><span role="img" aria-label="reset">💀</span></button></h2>
         <CardPile>
           {game.deck.filter(inLost).map((c, idx) => (
             <SmallCard
