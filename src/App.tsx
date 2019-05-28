@@ -5,7 +5,7 @@ import { Table, Discard, Lost, Hand, Play } from './Table';
 import './normalize.css';
 import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
 import Brute from './data/Brute';
-import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, togglePlaySelection, toggleLongRestSelection, planAction, ableToAct, readyToAct, playAction } from './data/Game';
+import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, togglePlaySelection, toggleLongRestSelection, planAction, ableToAct, readyToAct, playAction, turnsRemaining } from './data/Game';
 import useStorage from './util/useStorage';
 
 const grannoxGame = newGame([
@@ -27,7 +27,7 @@ const App: React.FC = () => {
   return (
     <Table>
       <Play>
-        <h2><button disabled={!ableToAct(game) || !readyToAct(game)} onClick={() => updateGame(playAction(game))}>ACT</button></h2>
+        <h2>{turnsRemaining(game)}<button disabled={!ableToAct(game) || !readyToAct(game)} onClick={() => updateGame(playAction(game))}>ACT</button></h2>
         <CardRow>
           {game.deck.filter(inPlayed).map((c) => (
             <SmallCard

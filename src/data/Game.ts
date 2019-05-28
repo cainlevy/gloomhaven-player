@@ -1,4 +1,4 @@
-import {TableCard, inDiscard, inHand, inPlayed, ActionType} from './ActionCard';
+import {TableCard, inDiscard, inHand, inPlayed, ActionType, inLost} from './ActionCard';
 import produce from 'immer';
 
 interface ActionPlan {
@@ -114,3 +114,14 @@ export const playShortRest = (game: Game) =>
       draft.deck[game.deck.indexOf(card)].location = card === randomDiscard ? 'lost' : 'hand'
     );
   });
+
+const maxTurns = (n: number): number => n > 0
+  ? Math.floor(n/2) + 1 + maxTurns(n-1)
+  : -1;
+
+export const turnsRemaining = (game: Game) => {
+  const n = game.deck.length - game.deck.filter(inLost).length;
+  const d = game.deck.filter(inDiscard).length;
+
+  return maxTurns(n) - Math.floor(d/2);
+}
