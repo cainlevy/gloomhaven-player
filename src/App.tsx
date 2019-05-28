@@ -5,7 +5,7 @@ import { Table, Discard, Lost, Hand, Play } from './Table';
 import './normalize.css';
 import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
 import Brute from './data/Brute';
-import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, playTop, playBottom, togglePlaySelection, toggleLongRestSelection, playAttack, playMove } from './data/Game';
+import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, togglePlaySelection, toggleLongRestSelection, planAction, ableToAct, readyToAct, playAction } from './data/Game';
 import useStorage from './util/useStorage';
 
 const grannoxGame = newGame([
@@ -27,15 +27,20 @@ const App: React.FC = () => {
   return (
     <Table>
       <Play>
+        <h2><button disabled={!ableToAct(game) || !readyToAct(game)} onClick={() => updateGame(playAction(game))}>ACT</button></h2>
         <CardRow>
           {game.deck.filter(inPlayed).map((c) => (
             <SmallCard
               key={c.name}
               card={c}
-              onTopClick={() => updateGame(playTop(game, c))}
-              onBottomClick={() => updateGame(playBottom(game, c))}
-              onAttack={() => updateGame(playAttack(game, c))}
-              onMove={() => updateGame(playMove(game, c))}
+              onTopClick={() => updateGame(planAction(game, c, 'top'))}
+              topSelected={game.actionPlan.top === c}
+              onBottomClick={() => updateGame(planAction(game, c, 'bottom'))}
+              bottomSelected={game.actionPlan.bottom === c}
+              onAttack={() => updateGame(planAction(game, c, 'attack'))}
+              attackSelected={game.actionPlan.attack === c}
+              onMove={() => updateGame(planAction(game, c, 'move'))}
+              moveSelected={game.actionPlan.move === c}
             />
           ))}
         </CardRow>

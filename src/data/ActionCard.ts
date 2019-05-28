@@ -10,6 +10,8 @@ export interface ActionCard {
   bottom: Action;
 }
 
+export type ActionType = 'top' | 'bottom' | 'attack' | 'move';
+
 export type TableLocation = 'hand' | 'discard' | 'lost' | 'played';
 
 export interface TableCard extends ActionCard {

@@ -14,9 +14,13 @@ interface Props {
 
   // sometimes you can choose one of four actions
   onTopClick?: () => void;
+  topSelected?: boolean;
   onBottomClick?: () => void;
+  bottomSelected?: boolean;
   onAttack?: () => void;
+  attackSelected?: boolean;
   onMove?: () => void;
+  moveSelected?: boolean;
 }
 
 const SelectableDiv: React.FC<React.HTMLAttributes<HTMLDivElement> & {selected: boolean}> = ({selected, ...props}) => <div {...props}/>
@@ -39,10 +43,11 @@ const Frame = styled(SelectableDiv)`
     'bottom move';
 `;
 
-const Top = styled.div`
+const Top = styled(SelectableDiv)`
   grid-area: top;
   background-color: #aab;
   position: relative;
+  ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
     &:hover {
@@ -51,10 +56,11 @@ const Top = styled.div`
   `}
 `;
 
-const Bottom = styled.div`
+const Bottom = styled(SelectableDiv)`
   grid-area: bottom;
   background-color: #99a;
   position: relative;
+  ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
     &:hover {
@@ -63,9 +69,10 @@ const Bottom = styled.div`
   `}
 `;
 
-const Attack = styled.div`
+const Attack = styled(SelectableDiv)`
   grid-area: attack;
   background-color: #99a;
+  ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
     &:hover {
@@ -74,9 +81,10 @@ const Attack = styled.div`
   `}
 `;
 
-const Move = styled.div`
+const Move = styled(SelectableDiv)`
   grid-area: move;
   background-color: #889;
+  ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
     &:hover {
@@ -117,14 +125,14 @@ const Card: React.FC<Props> = ({card, ...props}) => {
   return <AspectRatio ratio={1.39} className={props.className}>
     <Frame onClick={props.onSelect} selected={!!props.selected}>
       <Name>{card.name}</Name>
-      <Top onClick={props.onTopClick}>
+      <Top onClick={props.onTopClick} selected={!!props.topSelected}>
         {card.top.lose && <BottomLeft><CardIcon>x</CardIcon></BottomLeft>}
       </Top>
-      <Attack onClick={props.onAttack && onAttack} />
-      <Bottom onClick={props.onBottomClick}>
+      <Attack onClick={props.onAttack && onAttack} selected={!!props.attackSelected} />
+      <Bottom onClick={props.onBottomClick} selected={!!props.bottomSelected}>
         {card.bottom.lose && <BottomLeft><CardIcon>x</CardIcon></BottomLeft>}
       </Bottom>
-      <Move onClick={props.onMove && onMove} />
+      <Move onClick={props.onMove && onMove} selected={!!props.moveSelected} />
     </Frame>
   </AspectRatio>;
 };
