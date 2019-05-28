@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { SmallCard } from './Card';
+import Card from './Card';
 import { CardRow } from './CardCollection';
 import './normalize.css';
 import { inHand } from './data/ActionCard';
@@ -26,7 +26,7 @@ const Hand: React.FC = () => {
     </h2>
     <CardRow>
       {game.deck.filter(inHand).map((c) => (
-        <SmallCard
+        <Card
           key={c.name}
           card={c}
           selected={game.selectedForPlay.includes(c)}

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { SmallCard } from './Card';
+import Card from './Card';
 import { CardPile } from './CardCollection';
 import './normalize.css';
 import { inLost } from './data/ActionCard';
@@ -12,7 +12,7 @@ const Lost: React.FC = () => {
     <h2>Lost <button onClick={() => reset()}><span role="img" aria-label="reset">💀</span></button></h2>
     <CardPile>
       {game.deck.filter(inLost).map((c, idx) => (
-        <SmallCard
+        <Card
           key={c.name}
           card={c}
         />

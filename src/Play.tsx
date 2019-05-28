@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { SmallCard } from './Card';
+import Card from './Card';
 import { CardRow } from './CardCollection';
 import './normalize.css';
 import { inPlayed } from './data/ActionCard';
@@ -26,7 +26,7 @@ const Play: React.FC = () => {
     </h2>
     <CardRow>
       {game.deck.filter(inPlayed).map((c) => (
-        <SmallCard
+        <Card
           key={c.name}
           card={c}
           onTopClick={() => updateGame(planAction(game, c, 'top'))}

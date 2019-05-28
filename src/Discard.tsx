@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { SmallCard } from './Card';
-import { CardPile } from './CardCollection';
+import Card from './Card';
+import { CardRow } from './CardCollection';
 import './normalize.css';
 import { inDiscard } from './data/ActionCard';
 import { playShortRest, playLongRest, readyToLongRest, ableToRest, toggleLongRestSelection } from './data/Game';
@@ -11,9 +11,9 @@ const Discard: React.FC = () => {
 
   return <>
     <h2>Discard <button disabled={!ableToRest(game)} onClick={() => updateGame(readyToLongRest(game) ? playLongRest(game) : playShortRest(game))}>{readyToLongRest(game) ? 'Long' : 'Short'} Rest</button></h2>
-    <CardPile>
+    <CardRow>
       {game.deck.filter(inDiscard).map((c, idx) => (
-        <SmallCard
+        <Card
           key={c.name}
           card={c}
           selected={game.selectedForLongRest.includes(c)}
@@ -23,7 +23,7 @@ const Discard: React.FC = () => {
           }
         />
       ))}
-    </CardPile>
+    </CardRow>
   </>;
 }
 

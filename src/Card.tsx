@@ -48,6 +48,7 @@ const Top = styled(SelectableDiv)`
   grid-area: top;
   background-color: #aab;
   position: relative;
+  border-top-left-radius: 4%;
   ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
@@ -61,6 +62,7 @@ const Bottom = styled(SelectableDiv)`
   grid-area: bottom;
   background-color: #99a;
   position: relative;
+  border-bottom-left-radius: 4%;
   ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
@@ -78,6 +80,7 @@ const Attack = styled(SelectableDiv)`
   justify-content: center;
   align-items: center;
   padding: ${SPACE}px;
+  border-top-right-radius: 4%;
   ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
@@ -95,6 +98,7 @@ const Move = styled(SelectableDiv)`
   justify-content: center;
   align-items: center;
   padding: ${SPACE}px;
+  border-bottom-right-radius: 4%;
   ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
@@ -147,7 +151,5 @@ const Card: React.FC<Props> = ({card, ...props}) => {
     </Frame>
   </AspectRatio>;
 };
-
-export const SmallCard: React.FC<Props> = (props) => <div style={{width: 150}}><Card {...props} /></div>
 
 export default Card;

@@ -30,6 +30,7 @@ const Tab = styled(Link)`
 ` as unknown as typeof Link; // wut
 
 const Body = styled.section`
+  padding: ${SPACE}px ${SPACE}px 0;
 `;
 
 const Layout: React.FC = (props) => {
