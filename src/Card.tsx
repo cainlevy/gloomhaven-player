@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import AspectRatio from './util/AspectRatio';
 import { ActionCard } from './data/ActionCard';
 import CardIcon from './CardIcon';
+import { SPACE } from './Layout';
 
 interface Props {
   className?: string;
@@ -72,6 +73,11 @@ const Bottom = styled(SelectableDiv)`
 const Attack = styled(SelectableDiv)`
   grid-area: attack;
   background-color: #99a;
+  writing-mode: vertical-rl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: ${SPACE}px;
   ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
@@ -84,6 +90,11 @@ const Attack = styled(SelectableDiv)`
 const Move = styled(SelectableDiv)`
   grid-area: move;
   background-color: #889;
+  writing-mode: vertical-rl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: ${SPACE}px;
   ${(props) => props.selected ? 'border: 1px solid red;' : null}
   ${(props) => props.onClick && css`
     cursor: pointer;
@@ -128,11 +139,11 @@ const Card: React.FC<Props> = ({card, ...props}) => {
       <Top onClick={props.onTopClick} selected={!!props.topSelected}>
         {card.top.lose && <BottomLeft><CardIcon>x</CardIcon></BottomLeft>}
       </Top>
-      <Attack onClick={props.onAttack && onAttack} selected={!!props.attackSelected} />
+      <Attack onClick={props.onAttack && onAttack} selected={!!props.attackSelected}>attack</Attack>
       <Bottom onClick={props.onBottomClick} selected={!!props.bottomSelected}>
         {card.bottom.lose && <BottomLeft><CardIcon>x</CardIcon></BottomLeft>}
       </Bottom>
-      <Move onClick={props.onMove && onMove} selected={!!props.moveSelected} />
+      <Move onClick={props.onMove && onMove} selected={!!props.moveSelected}>move</Move>
     </Frame>
   </AspectRatio>;
 };

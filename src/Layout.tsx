@@ -5,7 +5,7 @@ import GameContext from './GameContext';
 import { inLost, inDiscard } from './data/ActionCard';
 import { ableToAct } from './data/Game';
 
-const SPACE = 7;
+export const SPACE = 7;
 
 const Header = styled.header`
 `;
