@@ -5,12 +5,25 @@ import './normalize.css';
 import { inHand } from './data/ActionCard';
 import { playSelection, ableToPlay, readyToPlay, togglePlaySelection } from './data/Game';
 import GameContext from './GameContext';
+import { useNavigation } from 'react-navi';
 
 const Hand: React.FC = () => {
   const {game, updateGame} = useContext(GameContext);
+  const navigation = useNavigation();
 
   return <>
-    <h2>Hand <button disabled={!ableToPlay(game) || !readyToPlay(game)} onClick={() => updateGame(playSelection(game))}>CHOOSE</button></h2>
+    <h2>
+      Hand
+      <button
+        disabled={!ableToPlay(game) || !readyToPlay(game)}
+        onClick={() => {
+          updateGame(playSelection(game));
+          navigation.navigate('/play');
+        }}
+      >
+        CHOOSE
+      </button>
+    </h2>
     <CardRow>
       {game.deck.filter(inHand).map((c) => (
         <SmallCard

@@ -5,12 +5,25 @@ import './normalize.css';
 import { inPlayed } from './data/ActionCard';
 import { planAction, ableToAct, readyToAct, playAction, turnsRemaining } from './data/Game';
 import GameContext from './GameContext';
+import { useNavigation } from 'react-navi';
 
 const Play: React.FC = () => {
   const {game, updateGame} = useContext(GameContext);
+  const navigation = useNavigation();
 
   return <>
-    <h2>{turnsRemaining(game)}<button disabled={!ableToAct(game) || !readyToAct(game)} onClick={() => updateGame(playAction(game))}>ACT</button></h2>
+    <h2>
+      {turnsRemaining(game)}
+      <button
+        disabled={!ableToAct(game) || !readyToAct(game)}
+        onClick={() => {
+          updateGame(playAction(game));
+          navigation.navigate('/hand');
+        }}
+      >
+        ACT
+      </button>
+    </h2>
     <CardRow>
       {game.deck.filter(inPlayed).map((c) => (
         <SmallCard

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from "styled-components";
 import { Link, useCurrentRoute } from 'react-navi';
+import GameContext from './GameContext';
+import { inLost, inDiscard } from './data/ActionCard';
+import { ableToAct } from './data/Game';
 
 const SPACE = 7;
 
@@ -31,13 +34,26 @@ const Body = styled.section`
 
 const Layout: React.FC = (props) => {
   const route = useCurrentRoute();
+  const {game} = useContext(GameContext);
 
   return <>
     <Header>
       <Navigation>
-        <Tab href="/lost" active={route.url.pathname === '/lost'}>Lost</Tab>
-        <Tab href="/hand" active={route.url.pathname === '/hand'}>Hand</Tab>
-        <Tab href="/discard" active={route.url.pathname === '/discard'}>Discard</Tab>
+        <Tab href="/lost" active={route.url.pathname === '/lost'}>
+          Lost ({game.deck.filter(inLost).length})
+        </Tab>
+        {ableToAct(game) ? (
+          <Tab href="/play" active={route.url.pathname === '/play'}>
+            Play
+          </Tab>
+        ) : (
+          <Tab href="/hand" active={route.url.pathname === '/hand'}>
+            Hand
+          </Tab>
+        )}
+        <Tab href="/discard" active={route.url.pathname === '/discard'}>
+          Discard ({game.deck.filter(inDiscard).length})
+        </Tab>
       </Navigation>
     </Header>
     <Body>
