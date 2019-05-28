@@ -8,8 +8,10 @@
     "@types/react": "16.8.17",
     "@types/react-dom": "16.8.4",
     "immer": "^3.1.1",
+    "navi": "^0.12.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-navi": "^0.12.7",
     "react-scripts": "3.0.1",
     "styled-components": "^4.2.0",
     "typescript": "3.4.5"
