@@ -1,5 +1,5 @@
 {
-  "name": "gloomhaven",
+  "name": "gloomhaven-player",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
