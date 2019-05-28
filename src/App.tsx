@@ -1,29 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { SmallCard } from './Card';
 import { CardRow, CardPile } from './CardCollection';
 import { Table, Discard, Lost, Hand, Play } from './Table';
 import './normalize.css';
 import { inHand, inDiscard, inLost, inPlayed } from './data/ActionCard';
-import Brute from './data/Brute';
-import newGame, { Game, playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, togglePlaySelection, toggleLongRestSelection, planAction, ableToAct, readyToAct, playAction, turnsRemaining } from './data/Game';
-import useStorage from './util/useStorage';
+import { playSelection, playShortRest, playLongRest, ableToPlay, readyToPlay, readyToLongRest, ableToRest, togglePlaySelection, toggleLongRestSelection, planAction, ableToAct, readyToAct, playAction, turnsRemaining } from './data/Game';
+import GameContext, {Provider as GameProvider} from './GameContext';
 
-const grannoxGame = newGame([
-  Brute['Spare Dagger'],
-  Brute['Balanced Measure'],
-  Brute['Juggernaut'],
-  Brute['Leaping Cleave'],
-  Brute['Overwhelming Strength'],
-  Brute['Warding Strength'],
-  Brute['Grab and Go'],
-  Brute['Shield Bash'],
-  Brute['Trample'],
-  Brute['Sweeping Blow'],
-].map((c) => ({...c, location: 'hand'})));
-
-const App: React.FC = () => {
-  const [game, updateGame] = useStorage<Game>('ghgame', grannoxGame);
-
+const View: React.FC = () => {
+  const {game, updateGame, reset} = useContext(GameContext);
   return (
     <Table>
       <Play>
@@ -81,7 +66,7 @@ const App: React.FC = () => {
       </Discard>
 
       <Lost>
-        <h2>Lost <button onClick={() => updateGame(grannoxGame)}><span role="img" aria-label="reset">💀</span></button></h2>
+        <h2>Lost <button onClick={() => reset()}><span role="img" aria-label="reset">💀</span></button></h2>
         <CardPile>
           {game.deck.filter(inLost).map((c, idx) => (
             <SmallCard
@@ -92,6 +77,14 @@ const App: React.FC = () => {
         </CardPile>
       </Lost>
     </Table>
+  );
+}
+
+const App: React.FC = () => {
+  return (
+    <GameProvider>
+      <View />
+    </GameProvider>
   );
 }
 
