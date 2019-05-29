@@ -1,11 +1,16 @@
 import React, { useContext } from 'react';
 import styled, { css } from "styled-components";
-import { Link, useCurrentRoute } from 'react-navi';
+import { Link, useCurrentRoute, useNavigation } from 'react-navi';
 import GameContext from './GameContext';
 import { inLost, inDiscard } from './data/ActionCard';
 import { ableToAct } from './data/Game';
+import { useSwipeable } from 'react-swipeable'
 
 export const SPACE = 7;
+
+const Page = styled.div`
+  height: 100vh;
+`;
 
 const Header = styled.header`
 `;
@@ -34,32 +39,38 @@ const Body = styled.section`
 `;
 
 const Layout: React.FC = (props) => {
-  const route = useCurrentRoute();
   const {game} = useContext(GameContext);
+  const route = useCurrentRoute();
+
+  const locations = [
+    {path: '/lost', name: `Lost (${game.deck.filter(inLost).length})`},
+    ableToAct(game) ? {path: '/play', name: 'Play'} : {path: '/hand', name: 'Hand'},
+    {path: '/discard', name: `Discard (${game.deck.filter(inDiscard).length})`},
+  ];
+  const currentIndex = locations.findIndex(({path}) => path === route.url.pathname);
+  const leftLocation = currentIndex > 0 ? locations[currentIndex - 1] : undefined;
+  const rightLocation = currentIndex < locations.length - 1 ? locations[currentIndex + 1] : undefined;
+  const navigation = useNavigation();
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => rightLocation && navigation.navigate(rightLocation.path),
+    onSwipedRight: () => leftLocation && navigation.navigate(leftLocation.path),
+  });
 
   return <>
-    <Header>
-      <Navigation>
-        <Tab href="/lost" active={route.url.pathname === '/lost'}>
-          Lost ({game.deck.filter(inLost).length})
-        </Tab>
-        {ableToAct(game) ? (
-          <Tab href="/play" active={route.url.pathname === '/play'}>
-            Play
-          </Tab>
-        ) : (
-          <Tab href="/hand" active={route.url.pathname === '/hand'}>
-            Hand
-          </Tab>
-        )}
-        <Tab href="/discard" active={route.url.pathname === '/discard'}>
-          Discard ({game.deck.filter(inDiscard).length})
-        </Tab>
-      </Navigation>
-    </Header>
-    <Body>
-      {props.children}
-    </Body>
+    <Page {...swipeHandlers}>
+      <Header>
+        <Navigation>
+          {locations.map(({path, name}) => (
+            <Tab key={path} href={path} active={route.url.pathname === path}>
+              {name}
+            </Tab>
+          ))}
+        </Navigation>
+      </Header>
+      <Body>
+        {props.children}
+      </Body>
+    </Page>
   </>
 };
 
